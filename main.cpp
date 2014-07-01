@@ -1,46 +1,63 @@
 #include <Veil/Veil.h>
 #include <Veil/Systems/Lambda.h>
 #include <Veil/SDL/Renderer.h>
+#include <Veil/SDL/Window.h>
 #include <Veil/SDL/Input.h>
 #include <Veil/SDL/Sound.h>
 
 using namespace Veil;
 
+SDL::Window* createWindow() {
+	SDL::Window* window = new SDL::Window();
+	window->setTitle("test");
+	window->setFullscreen(false);
+	window->setPosition(100, 100);
+	window->setSize(640, 480);
+	return window;
+}
+
+Entity* createPlayer() {
+	Entity* player = new Entity();
+	player->add(new Texture("assets/sprite.png"));
+	player->add(new Position(100, 200));
+	player->add(new Size(105, 153));
+	return player;
+}
+
+Entity* createText(const char* msg) {
+	Entity* text = new Entity();
+	text->add(new Typeface("assets/Amble-Bold.ttf", 60));
+	text->add(new Text(msg));
+	text->add(new Position(100, 100));
+	text->add(new Rotation(0.01));
+	return text;
+}
+
 int main (int argc, char* argv[]) {
 	// Create world and add player to it
 	World* world = new World();
 
-	// A window description is just an entity.
-	Entity* window = new Entity();
-	window->add(new WindowTitle("Test"));
-	window->add(new Fullscreen(false));
-	window->add(new Position(100, 100));
-	window->add(new Size(640, 480));
+	// Initialize renderer
+	SDL::Renderer::instance()->init();
 
-	// Add systems to the world
-	// TODO: Figure out a good way to abstract SDL_Init/SDL_Quit
-	// so multiple systems can depend on it, but only call it once
-	world->add(new SDLRenderer(window));
-	world->add(new SDLInput());
-	SDLSound* sound = SDLSound::instance();
-	// sound->playMusic("assets/song.mp3");
-	world->add(sound);
+	// TODO: Support multiple windows
+	// for (int i = 0; i < 2; i++) {
+		world->add(createWindow());
+	// }
+
+	// Add input handling
+	world->add(new SDL::Input());
+
+	// Play some music
+	SDL::Sound* sound = SDL::Sound::instance();
+	sound->playMusic("assets/song.mp3");
 
 	// Create person entity
-	Position* pos = new Position(100, 200);
-	Entity* player = new Entity();
-	player->add(new Texture("assets/sprite.png"));
-	player->add(pos);
-	player->add(new Size(105, 153));
+	Entity* player = createPlayer();
 	world->add(player);
 
 	// Add some text
-	Entity* title = new Entity();
-	title->add(new Typeface("assets/Amble-Bold.ttf", 60));
-	title->add(new Text("hello, world!"));
-	title->add(new Position(100, 100));
-	title->add(new Rotation(0.01));
-	world->add(title);
+	world->add(createText("hello, world!"));
 
 	// Lambda updater
 	double accumulated = 0;
