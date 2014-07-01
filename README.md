@@ -1,6 +1,34 @@
 # Veil-Demo
 
-This is a simple demo showing the basics of how to use [Veil](http://github.com/veilengine/veil).
+This is a simple demo showcasing the [Veil](http://github.com/veilengine/veil) game development framework using the sdl extension. Eventually there will be extensions for using GL or GLES.
+
+### Usage
+
+Presently, Veil is only tested on Linux. I'll be testing it on OSX soon.
+
+First, you'll need SDL2, SDL2_image, SDL2_ttf and libuv installed.
+
+```
+sudo apt-get install libuv-dev libsdl2-dev libsdl2-image-dev  libsdl2-mixer-dev libsdl2-ttf-dev -y
+```
+
+Next, we need to check out the repos. This demo currently assumes it's in the same path as the veil core and sdl libraries.
+
+```
+mkdir veil
+cd veil
+git clone git@github.com:veilengine/veil.git
+git clone git@github.com:veilengine/veil-sdl.git
+git clone git@github.com:veilengine/veil-demo.git
+cd veil-demo
+```
+
+Now we can just use `make` to build and run the demo.
+
+```
+make run
+```
+---
 
 ### Copyright (c) 2014 Stephen Belanger
 #### Licensed under MIT License

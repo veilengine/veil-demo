@@ -7,12 +7,12 @@
 
 using namespace Veil;
 
-SDL::Window* createWindow() {
+SDL::Window* createWindow(const char* title, int x, int y, int width, int height, bool fullscreen) {
 	SDL::Window* window = new SDL::Window();
-	window->setTitle("test");
-	window->setFullscreen(false);
-	window->setPosition(100, 100);
-	window->setSize(640, 480);
+	window->setTitle(title);
+	window->setFullscreen(fullscreen);
+	window->setSize(width, height);
+	window->setPosition(x, y);
 	return window;
 }
 
@@ -21,6 +21,7 @@ Entity* createPlayer() {
 	player->add(new Texture("assets/sprite.png"));
 	player->add(new Position(100, 200));
 	player->add(new Size(105, 153));
+	player->add(new Scale(2.0));
 	return player;
 }
 
@@ -40,10 +41,8 @@ int main (int argc, char* argv[]) {
 	// Initialize renderer
 	SDL::Renderer::instance()->init();
 
-	// TODO: Support multiple windows
-	// for (int i = 0; i < 2; i++) {
-		world->add(createWindow());
-	// }
+	// Create and attach window system
+	world->add(createWindow("test", 100, 100, 640, 480, false));
 
 	// Add input handling
 	world->add(new SDL::Input());

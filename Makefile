@@ -12,7 +12,11 @@ RM_RF := rm -rf
 CP_R := cp -r
 
 .PHONY: all
-all: bin bin/assets
+all: bin/game
+
+bin/game: bin bin/assets
+	make -C ../veil
+	make -C ../veil-sdl
 	$(CXX) $(CXX_FLAGS) $(CPP_FILES) $(LIBS) -o bin/game
 
 bin/assets:
@@ -24,3 +28,12 @@ bin:
 .PHONY: clean
 clean:
 	-$(RM_RF) bin
+
+.PHONY: distclean
+distclean: clean
+	make clean -C ../veil
+	make clean -C ../veil-sdl
+
+.PHONY: run
+run: bin/game
+	@-cd bin && ./game
